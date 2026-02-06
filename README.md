@@ -159,10 +159,10 @@ Fill values directly in appsettings.json:
   }
 }
 ```
-⚠️ Do not commit secrets in appsettings.json
+⚠️ Do not commit secrets in appsettings.json.
 In production, it is recommended to use Azure Key Vault for secret management.
 
-✅ Uploading images to 'wwwroot/images' works correctly in local mode
+✅ Uploading images to `wwwroot/images` works correctly in local mode
 
 ##### Install Dependencies & Run Migrations
 
@@ -184,12 +184,25 @@ cd src/frontend/RestaurantFrontend
 npm install
 ```
 
-##### Configure Environment Variables
+### Google OAuth Setup (Required for Google Login)
 
-Create a `.env` file in the frontend directory:
+This project uses Google OAuth for authentication.
 
+To obtain a Google Client ID:
+
+1. Go to https://console.cloud.google.com/
+2. Create a new project (or select an existing one)
+3. Navigate to **APIs & Services → Credentials**
+4. Create an **OAuth Client ID**
+5. Choose **Web Application**
+6. Add the following:
+   - Authorized JavaScript origin: `http://localhost:5173`
+   - Authorized redirect URI: `http://localhost:5173`
+7. Copy the generated **Client ID**
+
+Create a .env file inside `src/frontend/RestaurantFrontend` and add:
 ```env
-VITE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID
+VITE_CLIENT_ID=your_google_client_id_here
 ```
 
 ##### Run Development Server
