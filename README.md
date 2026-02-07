@@ -1,6 +1,6 @@
 # 🍽️ Restaurant Management System
 
-A full-stack restaurant management application built with React, ASP.NET Core, and SQLServer. Features include menu management, user authentication, shopping cart, order management.
+A full-stack restaurant management application built with React, ASP.NET Core, and SQLServer. Features include dishes and category management, user authentication, shopping cart, order management.
 
 ## Features
 
