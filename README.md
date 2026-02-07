@@ -36,7 +36,11 @@ A full-stack restaurant management application built with React, ASP.NET Core, a
 - **ASP.NET Core 8** - Web API framework
 - **Entity Framework Core** - ORM
 - **SQLServer** - Database
-- **JWT** - Authentication
+- **JWT Authentication** – Token-based authentication
+- **Role-based Authorization** – Access control (Admin/User roles)
+- **Google OAuth** – External authentication support
+- **SMTP (Mailtrap for development)** – Email sending (account verification & reset password)
+- **Swagger** – API documentation
 
 ### DevOps
 - **Docker** - Containerization
@@ -261,6 +265,23 @@ docker-compose down
 docker-compose down -v
 ```
 
+## Architecture
+
+This project follows **Clean Architecture** principles to ensure separation of concerns, testability, and maintainability.
+
+- **Restaurant.Core**  
+  Contains DTO's, entities , enums , helper classes , and services.  
+  This layer does not depend on any other project.
+
+- **Restaurant.Infrastructure**  
+  Repositories, EF Core DbContext, database migrations.
+
+- **Restaurant.WebAPI**  
+  ASP.NET Core Web API layer responsible for handling HTTP requests, authentication, authorization and exposing endpoints.
+
+The dependencies flow:
+WebAPI → Infrastructure → Core
+
 ## 📂 Project Structure
 
 ```
@@ -268,24 +289,41 @@ RestaurantSolution/
 ├── src/
 │   ├── Restaurant.WebAPI/          # ASP.NET Core Web API
 │   │   ├── Controllers/            # API Controllers
-│   │   ├── Models/                 # Data models
-│   │   ├── Services/               # Business logic
-│   │   ├── Data/                   # Database context
-│   │   └── appsettings.json        # Configuration
+|   |   ├── Middleware/             # Custom middleware
+│   │   ├── StartupExtensions/      # Startup configuration extensions
+│   │   ├── Template/               # Email templates 
+│   │   ├── appsettings.json        # Configuration
+│   │   ├── Program.cs              # Application entry point
+│   │   ├── Dockerfile              # Docker configuration
 │   │
-│   ├── Restaurant.Core/            # Domain models
-│   ├── Restaurant.Infrastructure/  # Data access layer
+│   ├── Restaurant.Core/            # Buisness Logic Layer
+│   │   ├── Domain/                 # Domain models/entities
+│   │   ├── DTO/                    # Data Transfer Objects
+│   │   ├── Enums/                  # Enumerations
+│   │   ├── Helpers/                # Helper classes
+│   │   ├── Service/                # Business logic services
+│   │   ├── ServiceContracts/       # Service interfaces
+│   │   ├── CustomValidators/       # Custom validation logic
+│   │
+│   ├── Restaurant.Infrastructure/  # Data Access Layer
+│   │   ├── DBContext/              # Entity Framework DbContext
+│   │   ├── Migrations/             # Database migrations
+│   │   ├── Repositories/           # Repository implementations
 │   │
 │   └── frontend/
 │       └── RestaurantFrontend/     # React application
 │           ├── src/
+│           │   ├── axios/          # API configuration
 │           │   ├── components/     # React components
 │           │   ├── pages/          # Page components
 │           │   ├── features/       # Redux slices
 │           │   ├── services/       # API services
-│           │   └── store/          # Redux store
-│           ├── public/             # Static files
-│           └── package.json
+│           │   ├── store/          # Redux store
+│           │   ├── App.jsx         # Root component
+│           │   ├── main.jsx        # Application entry point
+│           ├── index.html          # HTML template
+│           ├── package.json        # NPM dependencies
+│           ├── package-lock.json   # NPM lock file
 │
 ├── docker-compose.yml              # Docker compose configuration
 ├── .gitignore
@@ -326,16 +364,6 @@ https://localhost:7219/swagger
 - `GET /api/Orders` - Get user's orders
 - `POST /api/Orders` - Place new order
 - `GET /api/Orders/{id}` - Get order details
-
-## Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
 
 ## Author
 
