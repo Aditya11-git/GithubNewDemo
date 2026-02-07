@@ -17,7 +17,7 @@ A full-stack restaurant management application built with React, ASP.NET Core, a
 
 ### Admin Features
 - 🍔 **Dish Management** - Create, update, and delete dishes 
-- 📑 **Category Management** - Organize menu items by categories
+- 📑 **Category Management** - Create and soft-delete categories
 - 📋 **Order Management** - View and manage all customer orders
 
 ## Tech Stack
@@ -273,7 +273,7 @@ docker-compose down -v
 This project follows **Clean Architecture** principles to ensure separation of concerns, testability, and maintainability.
 
 - **Restaurant.Core**  
-  Contains DTO's, entities , enums , helper classes , and services.  
+  Contains DTOs, entities , enums , helper classes , and services.  
   This layer does not depend on any other project.
 
 - **Restaurant.Infrastructure**  
