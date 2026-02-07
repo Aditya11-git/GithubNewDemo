@@ -342,14 +342,8 @@ Contributions are welcome! Please follow these steps:
 **Aditya Gupta**
 
 - GitHub: [@Adityaa134](https://github.com/Adityaa134)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/YOUR_PROFILE)
+- LinkedIn: [Aditya Gupta](www.linkedin.com/in/aditya-gupta-897a3028a)
 - Email: adityagupta9966@gmail.com
 
-## Acknowledgments
-
-- [React Documentation](https://reactjs.org/)
-- [ASP.NET Core Documentation](https://docs.microsoft.com/aspnet/core)
-- [Tailwind CSS](https://tailwindcss.com/)
-- Icons by [React Icons](https://react-icons.github.io/react-icons/)
 
 ⭐ **If you like this project, please give it a star!** ⭐
