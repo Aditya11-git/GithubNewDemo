@@ -38,7 +38,7 @@ A full-stack restaurant management application built with React, ASP.NET Core, a
 ### Backend
 - **ASP.NET Core 8** - Web API framework
 - **Entity Framework Core** - ORM
-- **SQLServer** - Database
+- **SQL Server** - Database
 - **JWT Authentication** – Token-based authentication
 - **Role-based Authorization** – Access control (Admin/User roles)
 - **Google OAuth** – External authentication support
@@ -76,7 +76,7 @@ Fill values directly in appsettings.json:
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=RestaurentDB;User Id=sa;Password=YourStrongPassword123;Encrypt=False;TrustServerCertificate=True;"
+    "DefaultConnection": "Server=localhost;Database=RestaurantDB;User Id=sa;Password=YourStrongPassword123;Encrypt=False;TrustServerCertificate=True;"
   },
   "Jwt": {
     "Key": "jwt-secret-key",
