@@ -1,6 +1,6 @@
 # 🍽️ Restaurant Management System
 
-A full-stack restaurant management application built with React, ASP.NET Core, and SQLServer. Features include menu management, user authentication, shopping cart, order management, and admin dashboard.
+A full-stack restaurant management application built with React, ASP.NET Core, and SQLServer. Features include menu management, user authentication, shopping cart, order management.
 
 ## Features
 
@@ -9,28 +9,31 @@ A full-stack restaurant management application built with React, ASP.NET Core, a
 - 🔑 **Google OAuth** - Quick login with Google account
 - 📧 **Email Verification** - Verify email address during registration
 - 🔒 **Password Reset** - Forgot password functionality
-- 🍕 **Browse Menu** - View dishes by categories with images and prices
+- 🍕 **Browse Dishes** - View dishes by categories with images and prices
 - 🔍 **Search & Filter** - Find dishes quickly
 - 🛒 **Shopping Cart** - Add/remove items, update quantities
-- 📦 **Order Management** - Place orders and track order history
+- 📦 **Order Management** - Place orders, view order history and track order status
 - 👤 **User Profile** - Update profile information and profile picture
 
 ### Admin Features
-- 🍔 **Dish Management** - Create, update, and delete dishes (image upload supported in local mode)
+- 🍔 **Dish Management** - Create, update, and delete dishes 
 - 📑 **Category Management** - Organize menu items by categories
 - 📋 **Order Management** - View and manage all customer orders
 
 ## Tech Stack
 
 ### Frontend
-- **React 18** - UI library
-- **Redux Toolkit** - State management
-- **React Router v6** - Navigation
+- **React 19** – UI library
+- **Vite** – Frontend build tool and dev server
+- **Redux Toolkit & React Redux** - State management
+- **React Router DOM v7** – Client-side routing
+- **use-debounce** – Optimized debounced search
 - **Tailwind CSS** - Styling
 - **Axios** - HTTP client
 - **React Hook Form** - Form validation
 - **React Icons** - Icon library
 - **React Google OAuth** - Google authentication
+- **React Hot Toast** – User notifications
 
 ### Backend
 - **ASP.NET Core 8** - Web API framework
@@ -83,7 +86,7 @@ Fill values directly in appsettings.json:
   "SMTPConfig": {
       "Username": "your-username",
       "SenderDisplayName": "RestaurentApp",
-      "SenderAddress": "",
+      "SenderAddress": "no-reply@restaurant.com",
       "Port": "port-number",
       "Password": "your-password",
       "Host": "host"
@@ -223,7 +226,7 @@ appsettings.json contains empty values:
 ```
 docker-compose.yml maps environment variables:
 
-
+  - ConnectionStrings__DefaultConnection=${CONNECTIONSTRINGS__DEFAULTCONNECTION}
   - Jwt__Key=${JWT__KEY}
   - Jwt__Issuer=${JWT__ISSUER}
   - Jwt__Audience=${JWT__AUDIENCE}
@@ -297,7 +300,7 @@ RestaurantSolution/
 │   │   ├── Dockerfile              # Docker configuration
 │   │
 │   ├── Restaurant.Core/            # Buisness Logic Layer
-│   │   ├── Domain/                 # Domain models/entities
+│   │   ├── Domain/                 # Domain models/entities and repository contracts
 │   │   ├── DTO/                    # Data Transfer Objects
 │   │   ├── Enums/                  # Enumerations
 │   │   ├── Helpers/                # Helper classes
@@ -338,32 +341,42 @@ API documentation is available via Swagger UI when running the backend:
 https://localhost:7219/swagger
 ```
 
-### Main Endpoints
+## API Design 
 
-#### Authentication
-- `POST /api/Account/register` - Register new user
-- `POST /api/Account/login` - User login
-- `POST /api/Account/google-login` - Google OAuth login
-- `POST /api/Account/refresh-token` - Refresh JWT token
-- `POST /api/Account/logout` - Logout user
+The backend API is organized into the following functional modules:
 
-#### Dishes
-- `GET /api/Dishes` - Get all dishes
-- `GET /api/Dishes/{id}` - Get dish by ID
-- `POST /api/Dishes` - Add new dish (Admin)
-- `PUT /api/Dishes/{id}` - Update dish (Admin)
-- `DELETE /api/Dishes/{id}` - Delete dish (Admin)
+### Authentication
+- User registration and login
+- Google OAuth authentication
+- JWT access & refresh token flow
+- Secure logout
 
-#### Cart
-- `GET /api/Cart` - Get user's cart
-- `POST /api/Cart` - Add item to cart
-- `PUT /api/Cart` - Update cart item quantity
-- `DELETE /api/Cart/{id}` - Remove item from cart
+### Dishes
+- Retrieve dishes and dish details
+- Admin-only CRUD operations on dishes
 
-#### Orders
-- `GET /api/Orders` - Get user's orders
-- `POST /api/Orders` - Place new order
-- `GET /api/Orders/{id}` - Get order details
+### Categories
+- Retrieve dish categories
+- Admin-managed category lifecycle (with soft delete)
+
+### Cart
+- Manage user cart (add, update quantity, remove items)
+
+### Orders
+- Place orders from cart
+- View order history and order details
+- Admin order status management
+
+### Sample API Endpoints
+- `POST /api/Account/login`
+- `GET /api/Dishes`
+- `POST /api/Orders`
+
+Full request/response details are available via Swagger.
+
+`https://localhost:7219/swagger`
+or 
+`http://localhost:8080/swagger` (with docker)
 
 ## Author
 
