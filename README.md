@@ -53,76 +53,6 @@ Before you begin, ensure you have the following installed:
 - [Docker Desktop](https://www.docker.com/products/docker-desktop) (optional, for containerization)
 
 ## Getting Started
-
-Option 1: Run with Docker (Recommended)
-This option runs:
-ASP.NET Core API
-SQL Server
-Persistent database storage using Docker volumes
-✅ Prerequisites
-Docker Desktop
-Docker Compose
-📁 Environment Variables Setup
-Create a .env file in the same folder as docker-compose.yml.
-⚠️ This file is NOT committed to GitHub
-Example .env:
-Copy code
-Env
-# Database
-CONNECTIONSTRINGS__DEFAULTCONNECTION=Server=sqlserver;Database=RestaurantDB;User Id=sa;Password=YourStrong@Password;Encrypt=False;TrustServerCertificate=True
-SA_PASSWORD=YourStrong@Password
-
-# JWT
-JWT__KEY=this is a secret key for a jwt token
-JWT__ISSUER=https://localhost:7219
-JWT__AUDIENCE=http://localhost:5173
-
-# SMTP
-SMTPCONFIG__USERNAME=your_smtp_username
-SMTPCONFIG__SENDERDISPLAYNAME=Restaurant App
-SMTPCONFIG__SENDERADDRESS=no-reply@restaurant.com
-SMTPCONFIG__PORT=587
-SMTPCONFIG__PASSWORD=your_smtp_password
-SMTPCONFIG__HOST=smtp.yourprovider.com
-
-# CORS
-ALLOWEDORIGINS__ORIGINNAME=http://localhost:5173
-🔁 How configuration works
-appsettings.json contains empty values:
-Copy code
-Json
-"Jwt": {
-  "Key": "",
-  "Issuer": "",
-  "Audience": ""
-}
-docker-compose.yml maps environment variables:
-Copy code
-Yaml
-environment:
-  - Jwt__Key=${JWT__KEY}
-  - Jwt__Issuer=${JWT__ISSUER}
-  - Jwt__Audience=${JWT__AUDIENCE}
-Docker Compose reads values from .env
-ASP.NET Core automatically overrides appsettings.json using environment variables
-No secrets are stored in source control ✅
-▶️ Run the application
-From the solution root:
-Copy code
-Bash
-docker compose up --build
-API runs on: http://localhost:8080�
-SQL Server runs on: localhost:1433
-Database data is persisted using Docker volumes (data is not lost on container restart)
-⚠️ Important Docker Note (Images / wwwroot)
-Image uploads to wwwroot/images are restricted inside Docker due to Linux container file permissions.
-This is expected behavior
-For production, images should be stored in:
-Azure Blob Storage (planned)
-Or another external file storage
-✔️ Docker setup is meant for API + DB, not file storage.
-
-
 ### Option 1: Run Without Docker (Recommended for Development)
 
 #### 1. Clone the Repository
@@ -159,12 +89,15 @@ Fill values directly in appsettings.json:
   }
 }
 ```
-⚠️ Do not commit secrets in appsettings.json.
+
+**⚠️ Note:** Adjust connection string based on your local SQL Server setup.
+
+Do not commit secrets in appsettings.json.
 In production, it is recommended to use Azure Key Vault for secret management.
 
 ✅ Uploading images to `wwwroot/images` works correctly in local mode
 
-##### Install Dependencies & Run Migrations
+##### Run Migrations
 
 ```bash
 cd src/Restaurant.WebAPI
@@ -173,7 +106,9 @@ dotnet ef database update
 dotnet run
 ```
 
-Backend will run on `https://localhost:7219`
+#### Access the application
+- Backend API: `https://localhost:7219`
+- Swagger: `https://localhost:7219/swagger`
 
 #### 3. Frontend Setup
 
@@ -205,9 +140,10 @@ Create a .env file inside `src/frontend/RestaurantFrontend` and add:
 VITE_CLIENT_ID=your_google_client_id_here
 ```
 
-##### Run Development Server
+##### Run Frontend Development Server
 
 ```bash
+cd src/frontend/RestaurantFrontend
 npm run dev
 ```
 
@@ -222,7 +158,86 @@ Frontend will run on `http://localhost:5173`
 #### Prerequisites
 - Docker Desktop installed and running
 
-#### Run with Docker Compose
+#### 1. Clone the Repository
+```bash
+git clone https://github.com/Adityaa134/Restaurant-Project.git
+cd Restaurant-Project
+```
+
+#### 2. Backend Setup
+
+
+📁 Environment Variables Setup
+
+
+Create a .env file in the same folder as docker-compose.yml.
+Example .env
+```
+# Database
+CONNECTIONSTRINGS__DEFAULTCONNECTION=Server=sqlserver;Database=RestaurantDB;User Id=sa;Password=YourStrongPassword123;Encrypt=False;TrustServerCertificate=True
+SA_PASSWORD=YourStrongPassword123
+
+# JWT
+JWT__KEY=this is a secret key for a jwt token
+JWT__ISSUER=https://localhost:7219
+JWT__AUDIENCE=http://localhost:5173
+
+# SMTP
+SMTPCONFIG__USERNAME=your_smtp_username
+SMTPCONFIG__SENDERDISPLAYNAME=Restaurant App
+SMTPCONFIG__SENDERADDRESS=no-reply@restaurant.com
+SMTPCONFIG__PORT=587
+SMTPCONFIG__PASSWORD=your_smtp_password
+SMTPCONFIG__HOST=smtp.yourprovider.com
+
+# CORS
+ALLOWEDORIGINS__ORIGINNAME=http://localhost:5173
+```
+
+🔁 How configuration works
+
+
+appsettings.json contains empty values:
+
+```Json
+"Jwt": {
+  "Key": "",
+  "Issuer": "",
+  "Audience": ""
+},
+"SMTPConfig": {
+    "Username": "",
+    "SenderDisplayName": "",
+    "SenderAddress": "",
+    "Port": "",
+    "Password": "",
+    "Host": ""
+},
+"AllowedOrigins": {
+    "OriginName": ""
+}
+```
+docker-compose.yml maps environment variables:
+
+
+  - Jwt__Key=${JWT__KEY}
+  - Jwt__Issuer=${JWT__ISSUER}
+  - Jwt__Audience=${JWT__AUDIENCE}
+  - SMTPConfig__Username=${SMTPCONFIG__USERNAME}
+  - SMTPConfig__SenderDisplayName=${SMTPCONFIG__SENDERDISPLAYNAME}
+  - SMTPConfig__SenderAddress=${SMTPCONFIG__SENDERADDRESS}
+  - SMTPConfig__Port=${SMTPCONFIG__PORT}
+  - SMTPConfig__Password=${SMTPCONFIG__PASSWORD}
+  - SMTPConfig__Host=${SMTPCONFIG__HOST}
+  - AllowedOrigins__OriginName=${ALLOWEDORIGINS__ORIGINNAME}
+
+
+Docker Compose reads values from .env.
+
+
+ASP.NET Core automatically overrides appsettings.json using environment variables.
+
+#### 3. Run with Docker Compose
 
 ```bash
 # From the root directory
@@ -232,10 +247,8 @@ docker-compose up -d
 This will start:
 - SQL Server database on port `1433`
 - Backend API on port `8080`
-- Frontend on port `3000`
 
 #### Access the application
-- Frontend: `http://localhost:3000`
 - Backend API: `http://localhost:8080`
 - Swagger: `http://localhost:8080/swagger`
 
@@ -277,33 +290,6 @@ RestaurantSolution/
 ├── docker-compose.yml              # Docker compose configuration
 ├── .gitignore
 └── README.md
-```
-
-## Environment Variables
-
-### Backend (`appsettings.json`)
-
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=RestaurantDB;Trusted_Connection=True;TrustServerCertificate=True;"
-  },
-  "Jwt": {
-    "Key": "YOUR_SECRET_KEY",
-    "Issuer": "YOUR_ISSUER",
-    "Audience": "YOUR_AUDIENCE"
-  },
-  "Google": {
-    "ClientId": "YOUR_GOOGLE_CLIENT_ID"
-  }
-}
-```
-
-### Frontend (`.env`)
-
-```env
-VITE_API_BASE_URL=https://localhost:7219/api
-VITE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID
 ```
 
 ## API Documentation
