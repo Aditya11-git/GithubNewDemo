@@ -342,7 +342,7 @@ Contributions are welcome! Please follow these steps:
 **Aditya Gupta**
 
 - GitHub: [@Adityaa134](https://github.com/Adityaa134)
-- LinkedIn: [Aditya Gupta](www.linkedin.com/in/aditya-gupta-897a3028a)
+- LinkedIn: [Aditya Gupta](https://www.linkedin.com/in/aditya-gupta-897a3028a)
 - Email: adityagupta9966@gmail.com
 
 
