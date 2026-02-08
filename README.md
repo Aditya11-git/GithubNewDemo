@@ -72,7 +72,37 @@ cd Restaurant-Project
 #### 2. Backend Setup
 
 🔧 Configure appsettings.json (Local Only)
-Fill values directly in appsettings.json:
+
+**Database Configuration - Choose One:**
+
+**Option A: LocalDB (Recommended - Comes with Visual Studio)**
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=RestaurantDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;"
+  },
+  "Jwt": {
+    "Key": "jwt-secret-key",
+    "Issuer": "https://localhost:7219",
+    "Audience": "http://localhost:5173"
+  },
+  "SMTPConfig": {
+    "Username": "your-username",
+    "SenderDisplayName": "RestaurantApp",
+    "SenderAddress": "no-reply@restaurant.com",
+    "Port": "port-number",
+    "Password": "your-password",
+    "Host": "host"
+  },
+  "AllowedOrigins": {
+    "OriginName": "http://localhost:5173"
+  }
+}
+```
+
+**Option B: SQL Server Express/Developer**
+
+Requires [SQL Server installation](https://www.microsoft.com/sql-server/sql-server-downloads).
 ```json
 {
   "ConnectionStrings": {
@@ -84,23 +114,24 @@ Fill values directly in appsettings.json:
     "Audience": "http://localhost:5173"
   },
   "SMTPConfig": {
-      "Username": "your-username",
-      "SenderDisplayName": "RestaurentApp",
-      "SenderAddress": "no-reply@restaurant.com",
-      "Port": "port-number",
-      "Password": "your-password",
-      "Host": "host"
+    "Username": "your-username",
+    "SenderDisplayName": "RestaurantApp",
+    "SenderAddress": "no-reply@restaurant.com",
+    "Port": "port-number",
+    "Password": "your-password",
+    "Host": "host"
   },
   "AllowedOrigins": {
-      "OriginName": "origin-name"
+    "OriginName": "http://localhost:5173"
   }
 }
 ```
 
-**⚠️ Note:** Adjust connection string based on your local SQL Server setup.
-
-Do not commit secrets in appsettings.json.
-In production, it is recommended to use Azure Key Vault for secret management.
+**⚠️ Important Notes:**
+- Choose either Option A or Option B based on your SQL Server setup
+- Replace placeholder values (passwords, SMTP credentials) with your actual values
+- **Do not commit secrets in appsettings.json**
+- In production, use Azure Key Vault or environment variables for secret management
 
 ✅ Uploading images to `wwwroot/images` works correctly in local mode
 
