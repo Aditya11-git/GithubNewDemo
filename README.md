@@ -1,4 +1,4 @@
-# 🍽️ Restaurant Management System
+# 🍽️ Online Food Ordering System
 
 A full-stack restaurant management application built with React, ASP.NET Core, and SQLServer. Features include dishes and category management, user authentication, shopping cart, order management.
 
