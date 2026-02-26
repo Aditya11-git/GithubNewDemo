@@ -20,6 +20,26 @@ A full-stack restaurant management application built with React, ASP.NET Core, a
 - 📑 **Category Management** - Create and soft-delete categories
 - 📋 **Order Management** - View and manage all customer orders
 
+## 🧪 Testing
+
+This project includes comprehensive test coverage for both the service layer and API endpoints.
+
+### Test Suite
+- **Unit Tests**: 63 tests covering service logic, edge cases, and business rules
+- **Integration Tests**: 57 tests verifying API endpoints and real request/response flows
+
+### What's Tested
+- User authentication and authorization flows
+- Role-based access control (Admin vs User permissions)
+- Input validation and error handling
+- CRUD operations for all major features
+
+### Test Infrastructure
+- Custom authentication handler for testing protected endpoints
+- Isolated in-memory database per test run
+- Mock email service to avoid external dependencies
+
+
 ## Tech Stack
 
 ### Frontend
@@ -49,6 +69,12 @@ A full-stack restaurant management application built with React, ASP.NET Core, a
 - **Docker** - Containerization
 - **Docker Compose** - Multi-container orchestration
 
+### Testing
+- **xUnit** – Unit & integration testing framework
+- **FluentAssertions** – Readable assertions
+- **Moq** – Used to mock dependencies in unit tests
+- **AutoFixture** – Automatic test data generation
+
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
@@ -70,6 +96,7 @@ cd Restaurant-Project
 ```
 
 #### 2. Backend Setup
+
 
 🔧 Configure appsettings.json (Local Only)
 
@@ -127,7 +154,7 @@ Requires [SQL Server installation](https://www.microsoft.com/sql-server/sql-serv
 }
 ```
 
-**⚠️ Important Notes:**
+**⚠️ Notes:**
 - Choose either Option A or Option B based on your SQL Server setup
 - Replace placeholder values (passwords, SMTP credentials) with your actual values
 - **Do not commit secrets in appsettings.json**
@@ -138,7 +165,7 @@ Requires [SQL Server installation](https://www.microsoft.com/sql-server/sql-serv
 ##### Run Migrations
 
 ```bash
-cd src/Restaurant.WebAPI
+cd src/Restaurent.WebAPI
 dotnet restore
 dotnet ef database update
 dotnet run
@@ -153,7 +180,7 @@ dotnet run
 ##### Install Dependencies
 
 ```bash
-cd src/frontend/RestaurantFrontend
+cd src/frontend/RestaurentFrontend
 npm install
 ```
 
@@ -181,7 +208,7 @@ VITE_CLIENT_ID=your_google_client_id_here
 ##### Run Frontend Development Server
 
 ```bash
-cd src/frontend/RestaurantFrontend
+cd src/frontend/RestaurentFrontend
 npm run dev
 ```
 
@@ -207,8 +234,10 @@ cd Restaurant-Project
 
 📁 Environment Variables Setup
 
-
 Create a .env file in the same folder as docker-compose.yml.
+
+**⚠️ Note:** Docker requires SQL Server connection string. Do not use LocalDB connection string - it will cause connection errors in containers.
+
 Example .env
 ```
 # Database
@@ -279,7 +308,7 @@ ASP.NET Core automatically overrides appsettings.json using environment variable
 
 ```bash
 # From the root directory
-docker-compose up -d
+docker-compose up
 ```
 
 This will start:
@@ -303,14 +332,14 @@ docker-compose down -v
 
 This project follows **Clean Architecture** principles to ensure separation of concerns, testability, and maintainability.
 
-- **Restaurant.Core**  
+- **Restaurent.Core**  
   Contains DTOs, entities , enums , helper classes , and services.  
   This layer does not depend on any other project.
 
-- **Restaurant.Infrastructure**  
+- **Restaurent.Infrastructure**  
   Repositories, EF Core DbContext, database migrations.
 
-- **Restaurant.WebAPI**  
+- **Restaurent.WebAPI**  
   ASP.NET Core Web API layer responsible for handling HTTP requests, authentication, authorization and exposing endpoints.
 
 The dependencies flow:
@@ -359,6 +388,16 @@ RestaurantSolution/
 │           ├── package.json        # NPM dependencies
 │           ├── package-lock.json   # NPM lock file
 │
+├── tests/
+│   ├── RestaurantSolution.IntegrationTests/   # API integration tests
+│   │   ├── *ControllerIntegrationTests.cs     # API endpoint integration tests
+│   │   ├── CustomWebApplicationFactory.cs     # Configures in-memory test server for integration testing
+│   │   ├── IntegrationTestBase.cs             # Base class for integration tests
+│   │   └── TestAuthHandler.cs                 # Custom authentication handler for tests
+│   │
+│   └── RestaurantSolution.UnitTests/          # Service unit tests
+│       └── *ServiceTests.cs                   # Service layer test classes
+│
 ├── docker-compose.yml              # Docker compose configuration
 ├── .gitignore
 └── README.md
@@ -398,16 +437,16 @@ The backend API is organized into the following functional modules:
 - View order history and order details
 - Admin order status management
 
+### Addresses
+- Add, edit, and manage delivery addresses
+
 ### Sample API Endpoints
 - `POST /api/Account/login`
 - `GET /api/Dishes`
+- `POST /api/Address`
+- `GET /api/Address/{id}`
 - `POST /api/Orders`
 
-Full request/response details are available via Swagger.
-
-`https://localhost:7219/swagger`
-or 
-`http://localhost:8080/swagger` (with docker)
 
 ## Author
 
