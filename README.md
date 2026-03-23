@@ -65,9 +65,28 @@ This project includes comprehensive test coverage for both the service layer and
 - **SMTP (Mailtrap for development)** – Email sending (account verification & reset password)
 - **Swagger** – API documentation
 
-### DevOps
-- **Docker** - Containerization
-- **Docker Compose** - Multi-container orchestration
+## DevOps
+- **Docker** – Containerization for backend services
+- **Docker Hub** – Stores built container images
+- **Azure DevOps Pipelines** – CI/CD automation
+- **Multi-branch strategy** – Development workflow using `dev` and `main` branches
+- **Azure Key Vault** – Secure storage for secrets (JWT, SMTP, etc.)
+- **Azure Blob Storage** – Used for storing images in both development and production environments
+
+## Deployment Architecture
+- **Backend** -  deployed on **Azure App Service**
+- **Frontend** -  deployed on **Azure Static Web Apps**
+- **Database** - Azure SQL Database in Production (free tier)
+- **Secrets Management** - Azure Key Vault (used in App Service)
+- **File Storage** - Azure Blob Storage for images
+
+## CI/CD Workflow
+- All development is done on the `dev` branch where the CI/CD pipeline builds the Docker image, pushes it to Docker Hub, and runs tests  
+- After successful checks, changes are merged into `main` via Pull Request  
+- On `main` branch:
+  - Backend is built as a production Docker image and deployed to Azure App Service  
+  - Frontend is deployed via a separate pipeline to Azure Static Web Apps  
+- Deployments are triggered only from the `main` branch to ensure stable releases
 
 ### Testing
 - **xUnit** – Unit & integration testing framework
@@ -123,7 +142,11 @@ cd Restaurant-Project
   },
   "AllowedOrigins": {
     "OriginName": "http://localhost:5173"
-  }
+  },
+  "BlobStorage": {
+    "ContainerName": "",
+    "ConnectionString": ""
+    }
 }
 ```
 
@@ -150,6 +173,10 @@ Requires [SQL Server installation](https://www.microsoft.com/sql-server/sql-serv
   },
   "AllowedOrigins": {
     "OriginName": "http://localhost:5173"
+  },
+  "BlobStorage": {
+    "ContainerName": "",
+    "ConnectionString": ""
   }
 }
 ```
@@ -159,8 +186,6 @@ Requires [SQL Server installation](https://www.microsoft.com/sql-server/sql-serv
 - Replace placeholder values (passwords, SMTP credentials) with your actual values
 - **Do not commit secrets in appsettings.json**
 - In production, use Azure Key Vault or environment variables for secret management
-
-✅ Uploading images to `wwwroot/images` works correctly in local mode
 
 ##### Run Migrations
 
@@ -218,8 +243,6 @@ Frontend will run on `http://localhost:5173`
 
 ### Option 2: Run With Docker
 
-**⚠️ Note:** When running with Docker, you won't have direct access to `wwwroot/Images` folder for uploaded images. Use Option 1 for development if you need to manage uploaded files.
-
 #### Prerequisites
 - Docker Desktop installed and running
 
@@ -259,6 +282,10 @@ SMTPCONFIG__HOST=smtp.yourprovider.com
 
 # CORS
 ALLOWEDORIGINS__ORIGINNAME=http://localhost:5173
+
+#Azure BlobStorage
+BLOBSTORAGE__CONTAINERNAME=container-name
+BLOBSTORAGE__CONNECTIONSTRING=connection-string
 ```
 
 🔁 How configuration works
@@ -282,6 +309,10 @@ appsettings.json contains empty values:
 },
 "AllowedOrigins": {
     "OriginName": ""
+},
+"BlobStorage": {
+   "ContainerName": "",
+   "ConnectionString": ""
 }
 ```
 docker-compose.yml maps environment variables:
@@ -297,6 +328,8 @@ docker-compose.yml maps environment variables:
   - SMTPConfig__Password=${SMTPCONFIG__PASSWORD}
   - SMTPConfig__Host=${SMTPCONFIG__HOST}
   - AllowedOrigins__OriginName=${ALLOWEDORIGINS__ORIGINNAME}
+  - BlobStorage__ContainerName=${BLOBSTORAGE__CONTAINERNAME}
+  - BlobStorage__ConnectionString=${BLOBSTORAGE__CONNECTIONSTRING}
 
 
 Docker Compose reads values from .env.
